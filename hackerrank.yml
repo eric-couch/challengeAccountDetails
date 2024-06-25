@@ -1,0 +1,15 @@
+version: 1.0
+configuration:
+  has_webserver: false
+  readonly_paths:
+    - Base.Test/UnitTest1.cs
+  scoring:
+    command: rm -rf reports && dotnet build && dotnet test --logger xunit --results-directory ./reports/
+    files: [reports/TestResults.xml]
+  ide_config:
+    default_open_files:
+      - Base.App/Program.cs
+    project_menu:
+      run: dotnet run --project Base.App
+      install: dotnet build
+      test: rm -rf reports && dotnet build && dotnet test --logger xunit --results-directory ./reports/
