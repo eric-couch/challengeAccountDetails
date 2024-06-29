@@ -4,7 +4,6 @@ namespace Base.App
 {
     public class Account
     {
-        
     }
 
 }

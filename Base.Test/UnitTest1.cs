@@ -10,9 +10,9 @@ namespace Base.Test
         public void AccountClassStructureTest()
         {
             Type accountType = typeof(Account);
-            PropertyInfo idProperty = accountType.GetProperty("id")!;
-            PropertyInfo accountTypeProperty = accountType.GetProperty("accountType")!;
-            PropertyInfo balanceProperty = accountType.GetProperty("balance")!;
+            PropertyInfo idProperty = accountType.GetProperty("Id")!;
+            PropertyInfo accountTypeProperty = accountType.GetProperty("AccountType")!;
+            PropertyInfo balanceProperty = accountType.GetProperty("Balance")!;
 
             Assert.NotNull(idProperty);
             Assert.NotNull(accountTypeProperty);
@@ -51,14 +51,18 @@ namespace Base.Test
             ConstructorInfo parameterizedConstructor = accountType.GetConstructor(new[] { typeof(int), typeof(string), typeof(decimal) })!;
             if (parameterizedConstructor == null)
             {
-                Account account = (Account)Activator.CreateInstance(accountType, new object[] { 1, "Savings", 1000 })!;
+                    Assert.Fail("Parameterized constructor not found");
 
+            } else
+            {
+                Account account = (Account)Activator.CreateInstance(accountType, new object[] { 1, "Savings", 1000.0M })!;
                 // using reflection to test if Withdraw method exists
                 MethodInfo withdrawMethod = accountType.GetMethod("Withdraw")!;
                 if (withdrawMethod != null)
                 {
-                    withdrawMethod.Invoke(account, new object[] { 500 });
-                    PropertyInfo balanceProperty = accountType.GetProperty("balance")!;
+                    bool withdrawalWorked = (bool)withdrawMethod.Invoke(account, new object[] { 500.0M });
+                    Assert.True(withdrawalWorked);
+                    PropertyInfo balanceProperty = accountType.GetProperty("Balance")!;
                     decimal balance = (decimal)balanceProperty.GetValue(account)!;
                     Assert.Equal(500, balance);
                 }
